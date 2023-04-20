@@ -93,28 +93,26 @@ struct Solution{
                 nguoiTiepCan.insert(n);
             }
             KOLDaThue.push_back(c.second);
-//            auto range = KOLChuaThue.equal_range(c.first);
-//            bool found = false;
-//            for (auto it = range.first; it!= range.second && !found;){
-//                if(it->second == c.second){
-//                    auto next_it = next(it);
-//                    KOLChuaThue.erase(it);
-//                    it = next_it;
-//                    found=true;
-//                }
-//                else 
-//                    ++it;
-//            }
-        auto x=KOLChuaThue.find(c.first);
-        cout<<x->second.name;
-//        KOLChuaThue.erase(KOLChuaThue.find(c.first));
+            auto range = KOLChuaThue.equal_range(c.first);
+            bool found = false;
+            for (multimap<int,KOL>::iterator it = range.first; it!= range.second && !found;){
+                if(it->second.name == c.second.name){
+                    KOLChuaThue.erase(next(it));
+                    cout<<"check2"<<endl;
+                    found=true;
+                }
+                else {
+                    cout<<"check3"<<endl;
+                    ++it;
+            }
+        }
         }
         tongSoNguoiTiepCan = nguoiTiepCan.size();
     }
 
     Solution(Input &data){
         tongSoNguoiTiepCan=0;
-        this->data = &data;
+       this->data = &data;
         tienConLai = data.providedMoney;
         KOLChuaThue = data.listKOL;
         beginSolution();
@@ -127,7 +125,6 @@ struct Solution{
         for(auto c: KOLDaThue){
             cout<<c.name<<endl;
         }
-
     }
 };
 
@@ -135,7 +132,7 @@ int main (){
     Input io("database/output2.txt");
     Solution solution(io);
     solution.printSolution();
-    solution.tongSoTienDeThueHet();
-    solution.tongSoFollower();
+//    solution.tongSoTienDeThueHet();
+//    solution.tongSoFollower();
     }
 
