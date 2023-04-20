@@ -93,6 +93,21 @@ struct Solution{
                 nguoiTiepCan.insert(n);
             }
             KOLDaThue.push_back(c.second);
+//            auto range = KOLChuaThue.equal_range(c.first);
+//            bool found = false;
+//            for (auto it = range.first; it!= range.second && !found;){
+//                if(it->second == c.second){
+//                    auto next_it = next(it);
+//                    KOLChuaThue.erase(it);
+//                    it = next_it;
+//                    found=true;
+//                }
+//                else 
+//                    ++it;
+//            }
+        auto x=KOLChuaThue.find(c.first);
+        cout<<x->second.name;
+//        KOLChuaThue.erase(KOLChuaThue.find(c.first));
         }
         tongSoNguoiTiepCan = nguoiTiepCan.size();
     }
@@ -114,8 +129,6 @@ struct Solution{
         }
 
     }
-
-
 };
 
 int main (){
