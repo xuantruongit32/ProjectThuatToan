@@ -1,5 +1,7 @@
 // INFLUENCE MAXIMIZATION WITH LIMITED BUDGET
 #include<bits/stdc++.h>
+#include <functional>
+#include <iostream>
 using namespace std;
 struct KOL {
     string name;
@@ -7,13 +9,19 @@ struct KOL {
     vector<int> followerSet;
     float money;
     KOL(string name, int numberFollowers, vector<int> followerSet, float money):name(name), numberFollowers(numberFollowers), followerSet(followerSet), money(money){} // Constructor
+    KOL(){}
+    bool operator==(const KOL &kol) const {
+        return (name == kol.name && numberFollowers ==kol.numberFollowers && followerSet == kol.followerSet && money == kol.money);
+    }
 };
 
 struct Input{
     float providedMoney;
-    vector<KOL> listKOL;
+    multimap<int,KOL,greater<int>> listKOL;
     string path;
-    Input(string path): path(path){};
+    Input(string path): path(path){
+        readFile();
+    };
     void readFile(){
         ifstream ifile(path); //Read file data
         string line;
@@ -44,18 +52,59 @@ struct Input{
                followerSet.push_back(stoi(token2)); 
             }
             KOL newKOL(name, numberFollowers, followerSet, money);
-            listKOL.push_back(newKOL);
+            listKOL.insert({numberFollowers,newKOL});
         }
     }
 
 };
 
+struct Solution{
+    Input *data;
+    float tienConLai;
+    set<int> nguoiTiepCan;
+    int tongSoNguoiTiepCan;
+    multimap<int,KOL,greater<int>> KOLChuaThue;
+    vector<KOL> KOLDaThue;
+
+    void beginSolution(){
+        for(auto c: data->listKOL){
+            if(tienConLai<=0)
+                break;
+            if(c.second.money>tienConLai)
+                continue;
+            tienConLai -=c.second.money;
+            for(auto n: c.second.followerSet){
+                nguoiTiepCan.insert(n);
+            }
+            KOLDaThue.push_back(c.second);
+        }
+        tongSoNguoiTiepCan = nguoiTiepCan.size();
+    }
+
+    Solution(Input &data){
+        tongSoNguoiTiepCan=0;
+        this->data = &data;
+        tienConLai = data.providedMoney;
+        KOLChuaThue = data.listKOL;
+        beginSolution();
+    }
+
+    void printSolution(){
+        cout<<"Tong tien thue: "<<data->providedMoney-tienConLai<<endl;
+        cout<<"So nguoi tiep can: "<<tongSoNguoiTiepCan<<endl;
+        cout<<"KOL: "<<endl;
+        for(auto c: KOLDaThue){
+            cout<<c.name<<endl;
+        }
+
+    }
+
+
+};
+
 int main (){
     Input io("database/output1.txt");
-    io.readFile();
-    float i =0;
-    for(auto c: io.listKOL[0].followerSet){
-        cout<<c << " ";
+    Solution solution(io);
+    solution.printSolution();
     }
-}
 

@@ -1,0 +1,14 @@
+
+    while(tienConLai > 0){
+        for(auto it = KOLChuaThue.begin(); it != KOLChuaThue.end(); ){
+            if(it->second.money > tienConLai){
+                ++it;
+                continue;
+            }
+            tienConLai -= it->second.money;
+            for(auto& follower : it->second.followerSet){
+                nguoiTiepCan.insert(follower);
+            }
+            KOLDaThue.push_back(it->second);
+            it = KOLChuaThue.erase(it);
+        }
