@@ -7,8 +7,8 @@ struct KOL {
     string name;
     int numberFollowers;
     vector<int> followerSet;
-    float money;
-    KOL(string name, int numberFollowers, vector<int> followerSet, float money):name(name), numberFollowers(numberFollowers), followerSet(followerSet), money(money){} // Constructor
+    double money;
+    KOL(string name, int numberFollowers, vector<int> followerSet, double money):name(name), numberFollowers(numberFollowers), followerSet(followerSet), money(money){} // Constructor
     KOL(){}
     bool operator==(const KOL &kol) const {
         return (name == kol.name && numberFollowers ==kol.numberFollowers && followerSet == kol.followerSet && money == kol.money);
@@ -16,7 +16,7 @@ struct KOL {
 };
 
 struct Input{
-    float providedMoney;
+    double providedMoney;
     multimap<int,KOL,greater<int>> listKOL;
     string path;
     Input(string path): path(path){
@@ -39,9 +39,9 @@ struct Input{
             iss >> token;
             name = token;
             iss >> token;
-            float money = stof(token); //So tien thue KOL
+            double money = stod(token); //So tien thue KOL
             iss >> token;
-            float numberFollowers = stof(token);
+            int numberFollowers = stoi(token);
             iss >> token;
             string newToken = token.substr(1, token.length()-2); //Bo dau {} o dau va cuoi
             istringstream iss1(newToken);
@@ -60,14 +60,30 @@ struct Input{
 
 struct Solution{
     Input *data;
-    float tienConLai;
+    double tienConLai;
     set<int> nguoiTiepCan;
     int tongSoNguoiTiepCan;
     multimap<int,KOL,greater<int>> KOLChuaThue;
     vector<KOL> KOLDaThue;
 
-    void beginSolution(){
+    void tongSoTienDeThueHet(){
+         double i=0;
+        for (auto c: data->listKOL){
+            i+=c.second.money;
+        }
+        cout<<"Tong so tien de thue het KOL: "<<i<<endl;
+    }
+    void tongSoFollower(){
+        long int i=0;
         for(auto c: data->listKOL){
+            i+=c.second.followerSet.size();
+        }
+        cout<<"Tong so Follower: "<<i<<endl;
+        
+    }
+
+    void beginSolution(){
+        for(auto c: KOLChuaThue){
             if(tienConLai<=0)
                 break;
             if(c.second.money>tienConLai)
@@ -103,8 +119,10 @@ struct Solution{
 };
 
 int main (){
-    Input io("database/output1.txt");
+    Input io("database/output2.txt");
     Solution solution(io);
     solution.printSolution();
+    solution.tongSoTienDeThueHet();
+    solution.tongSoFollower();
     }
 
