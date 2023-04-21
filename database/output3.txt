@@ -1,0 +1,5 @@
+Provided money: 15
+KOL Money Number_Followers Followers
+John 32.5 7 {42,74,52,24,51,4,63}
+Emily 14.5 7 {15,6,92,57,24,80,40}
+Michael 29.0 10 {67,36,11,88,99,8,21,39,18,31}
