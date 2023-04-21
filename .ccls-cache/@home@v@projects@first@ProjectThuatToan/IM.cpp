@@ -108,6 +108,9 @@ struct Solution{
         }
         tongSoNguoiTiepCan = nguoiTiepCan.size();
     }
+    int getScore(){
+        return tongSoNguoiTiepCan; 
+    }
 
     Solution(Input &data){
         tongSoNguoiTiepCan=0;
@@ -130,6 +133,7 @@ struct Solution{
 int main (){
     Input io("database/output2.txt");
     Solution solution(io);
+    cout<<solution.getScore();
     solution.printSolution();
 //    solution.tongSoTienDeThueHet();
 //    solution.tongSoFollower();
