@@ -2,6 +2,7 @@
 #include<bits/stdc++.h>
 #include <functional>
 #include <iostream>
+#include <unordered_map>
 using namespace std;
 struct KOL {
     string name;
@@ -61,7 +62,7 @@ struct Input{
 struct Solution{
     Input *data;
     double tienConLai;
-    set<int> nguoiTiepCan;
+    unordered_map<int,int> nguoiTiepCan; //int dau tien la ten nguoi theo doi, int sau la dem so KOL ma nguoi do theo doi
     int tongSoNguoiTiepCan;
     multimap<int,KOL,greater<int>> KOLChuaThue;
     vector<KOL> KOLDaThue;
@@ -90,7 +91,7 @@ struct Solution{
                 continue;
             tienConLai -=c.second.money;
             for(auto n: c.second.followerSet){
-                nguoiTiepCan.insert(n);
+                nguoiTiepCan[n]++;
             }
             KOLDaThue.push_back(c.second);
             auto range = KOLChuaThue.equal_range(c.first);
