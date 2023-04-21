@@ -67,6 +67,26 @@ struct Solution{
     multimap<int,KOL,greater<int>> KOLChuaThue;
     vector<KOL> KOLDaThue;
 
+    Solution& operator=(const Solution& other){
+        if(this != &other){
+            this->data = other.data;
+            this->tienConLai = other.tienConLai;
+            this->nguoiTiepCan = other.nguoiTiepCan;
+            this->tongSoNguoiTiepCan = other.tongSoNguoiTiepCan;
+            this->KOLChuaThue = other.KOLChuaThue;
+            this->KOLDaThue = other.KOLDaThue;
+        }
+        return *this;
+    }
+    Solution(const Solution& other){
+            data = other.data;
+            tienConLai = other.tienConLai;
+            nguoiTiepCan = other.nguoiTiepCan;
+            tongSoNguoiTiepCan = other.tongSoNguoiTiepCan;
+            KOLChuaThue = other.KOLChuaThue;
+            KOLDaThue = other.KOLDaThue;
+    }
+
     void tongSoTienDeThueHet(){
          double i=0;
         for (auto c: data->listKOL){
@@ -111,6 +131,17 @@ struct Solution{
     int getScore(){
         return tongSoNguoiTiepCan; 
     }
+    Solution getBestNeighbor(){
+        Solution bestNeighbor = *this;
+        int minScore = bestNeighbor.getScore();
+        for(auto kolDaThue : KOLDaThue){
+            for(auto kolChuaThue : KOLChuaThue){
+
+
+            }
+        }
+    }
+    Solution(){}
 
     Solution(Input &data){
         tongSoNguoiTiepCan=0;
@@ -133,8 +164,10 @@ struct Solution{
 int main (){
     Input io("database/output2.txt");
     Solution solution(io);
-    cout<<solution.getScore();
+    Solution s;
 //    solution.printSolution();
+    s = solution;
+    s.printSolution();
 //    solution.tongSoTienDeThueHet();
 //    solution.tongSoFollower();
     }
