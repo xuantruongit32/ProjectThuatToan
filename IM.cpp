@@ -1,7 +1,9 @@
 // INFLUENCE MAXIMIZATION WITH LIMITED BUDGET
+#include <algorithm>
 #include<bits/stdc++.h>
 #include <functional>
 #include <iostream>
+#include <iterator>
 #include <unordered_map>
 using namespace std;
 struct KOL {
@@ -11,6 +13,22 @@ struct KOL {
     double money;
     KOL(string name, int numberFollowers, vector<int> followerSet, double money):name(name), numberFollowers(numberFollowers), followerSet(followerSet), money(money){} // Constructor
     KOL(){}
+    KOL& operator=(const KOL& other){
+        if(this != &other){
+            this->name = other.name;
+            this->numberFollowers = other.numberFollowers;
+            this->followerSet = other.followerSet;
+            this->money = other.money;
+        }
+        return *this;
+    }
+    bool operator==(const KOL& other){
+        return (name == other.name && numberFollowers == other.numberFollowers && followerSet == other.followerSet && money == other.money);
+    }
+    bool operator<(const KOL& other){
+        return numberFollowers/money < other.numberFollowers/other.money;
+    }
+
 };
 
 struct Input{
@@ -75,49 +93,37 @@ struct Solution{
         }
         return *this;
     }
-    Solution(const Solution& other){
-            data = other.data;
-            tienConLai = other.tienConLai;
-            nguoiTiepCan = other.nguoiTiepCan;
-            tongSoNguoiTiepCan = other.tongSoNguoiTiepCan;
-            KOLChuaThue = other.KOLChuaThue;
-            KOLDaThue = other.KOLDaThue;
-    }
-
     void tongSoTienDeThueHet(){
          double i=0;
         for (auto c: data->listKOL){
             i+=c.money;
         }
-        cout<<"Tong so tien de thue het KOL: "<<i<<endl;
+        cout<<"Tong so tien de thue het KOL cua data: "<<i<<endl;
     }
     void tongSoFollower(){
         long int i=0;
         for(auto c: data->listKOL){
             i+=c.followerSet.size();
         }
-        cout<<"Tong so Follower: "<<i<<endl;
+        cout<<"Tong so Follower cua data: "<<i<<endl;
         
     }
     void thueKOL(KOL kol, int i){
         tienConLai -= kol.money;
+        cout<<tienConLai<<endl;
         for(auto n: kol.followerSet){
             nguoiTiepCan.insert(n);
         }
         tongSoNguoiTiepCan = nguoiTiepCan.size();
-        KOLChuaThue.erase(KOLChuaThue.begin()+1);
+        KOLChuaThue.erase(KOLChuaThue.begin()+i);
         KOLDaThue.push_back(kol);
 
     }
-    KOL getFirstKOL(){
-        KOL firstKOL;
-        float maxScore = -1;
-        for(int i=0; i<KOLChuaThue.size(); i++){
-            int kolScore = KOLChuaThue[i].numberFollowers/KOLChuaThue[i].money;
-            if (kolScore>maxScore)
-                firstKOL = KOLChuaThue[i];
-        }
-        return firstKOL;
+    void thueFirstKOL(){
+        auto firstIT = max_element(KOLChuaThue.begin(), KOLChuaThue.end());
+        KOL firstKOL = *firstIT;
+        int index = distance(KOLChuaThue.begin(), firstIT);
+        thueKOL(firstKOL,index);
     }
     float getScore(KOL kol){
         unordered_set<int> nguoiTiepCanTest = nguoiTiepCan;
@@ -129,34 +135,29 @@ struct Solution{
         return score;
 
     }
-//    void beginSolution(){
-//        for(auto c: KOLChuaThue){
-//            if(tienConLai<=0)
-//                break;
-//            if(c.second.money>tienConLai)
-//                continue;
-//            tienConLai -=c.second.money;
-//            for(auto n: c.second.followerSet){
-//                nguoiTiepCan[n]++;
-//            }
-//            KOLDaThue.push_back(c.second);
-//            auto range = KOLChuaThue.equal_range(c.first);
-//            bool found = false;
-//            for (multimap<int,KOL>::iterator it = range.first; it!= range.second && !found;){
-//                if(it->second.name == c.second.name){
-//                    KOLChuaThue.erase(next(it));
-//                    found=true;
-//                }
-//                else {
-//                    ++it;
-//            }
-//        }
-//        }
-//        tongSoNguoiTiepCan = nguoiTiepCan.size();
-//    }
 
-    int getScore(){
-        return tongSoNguoiTiepCan; 
+    void greedySolution(){
+        thueFirstKOL();
+        KOL nextKOL;
+        while(!KOLChuaThue.empty()){
+            float maxScore=-1;
+            float maxIndex=-1;
+            for(int i=0;i<KOLChuaThue.size();i++){
+                if(tienConLai<KOLChuaThue[i].money)
+                    // Neu tien khong du thue KOL nay, bo qua va tiep tuc voi KOL khac
+                    continue;
+                if(getScore(KOLChuaThue[i])>maxScore){
+                    nextKOL = KOLChuaThue[i];
+                    maxScore=getScore(KOLChuaThue[i]);
+                    maxIndex=i;
+                }
+            }
+            if(maxIndex == -1){
+                break;
+            }
+            thueKOL(nextKOL,maxIndex);
+        }
+
     }
 
     Solution(){}
@@ -166,7 +167,7 @@ struct Solution{
         this->data = &data;
         tienConLai = data.providedMoney;
         KOLChuaThue = data.listKOL;
-//        beginSolution();
+        greedySolution();
     }
 
     void printSolution(){
@@ -180,11 +181,9 @@ struct Solution{
 };
 
 int main (){
-    Input io("database/output2.txt");
+    Input io("database/output1.txt");
     Solution solution(io);
-    cout<<solution.getScore(solution.getFirstKOL())<<endl;
-//    solution.getBestNeighbor().printSolution();
-//    solution.printSolution();
+    solution.printSolution();
 //    solution.tongSoTienDeThueHet();
 //    solution.tongSoFollower();
     }
