@@ -12,7 +12,7 @@ struct KOL {
     vector<int> followerSet;
     double money;
     KOL(string name, int numberFollowers, vector<int> followerSet, double money):name(name), numberFollowers(numberFollowers), followerSet(followerSet), money(money){} // Constructor
-    KOL(){}
+    KOL(){} //contructor
     KOL& operator=(const KOL& other){
         if(this != &other){
             this->name = other.name;
@@ -21,23 +21,23 @@ struct KOL {
             this->money = other.money;
         }
         return *this;
-    }
+    }  //KOL A = KOL B
     bool operator==(const KOL& other){
         return (name == other.name && numberFollowers == other.numberFollowers && followerSet == other.followerSet && money == other.money);
-    }
+    } //Check A va B co bang nhau khong
     bool operator<(const KOL& other){
         return numberFollowers/money < other.numberFollowers/other.money;
     }
 
 };
 
-struct Input{
+struct Input{ //doc File
     double providedMoney;
     vector<KOL> listKOL;
-    string path;
+    string path; 
     Input(string path): path(path){
         readFile();
-    };
+    }; //constructor
     void readFile(){
         ifstream ifile(path); //Read file data
         string line;
@@ -82,17 +82,6 @@ struct Solution{
     vector<KOL> KOLChuaThue;
     vector<KOL> KOLDaThue;
 
-    Solution& operator=(const Solution& other){
-        if(this != &other){
-            this->data = other.data;
-            this->tienConLai = other.tienConLai;
-            this->nguoiTiepCan = other.nguoiTiepCan;
-            this->tongSoNguoiTiepCan = other.tongSoNguoiTiepCan;
-            this->KOLChuaThue = other.KOLChuaThue;
-            this->KOLDaThue = other.KOLDaThue;
-        }
-        return *this;
-    }
     void tongSoTienDeThueHet(){
          double i=0;
         for (auto c: data->listKOL){
@@ -108,7 +97,7 @@ struct Solution{
         cout<<"Tong so Follower cua data: "<<i<<endl;
         
     }
-    void thueKOL(KOL kol, int i){
+    void thueKOL(KOL kol, int i){ //i la vi tri cua kol trong KOLChuaTHue
         tienConLai -= kol.money;
         cout<<tienConLai<<endl;
         for(auto n: kol.followerSet){
@@ -120,12 +109,12 @@ struct Solution{
 
     }
     void thueFirstKOL(){
-        auto firstIT = max_element(KOLChuaThue.begin(), KOLChuaThue.end());
+        auto firstIT = max_element(KOLChuaThue.begin(), KOLChuaThue.end()); //Tim thang max score de thue
         KOL firstKOL = *firstIT;
-        int index = distance(KOLChuaThue.begin(), firstIT);
+        int index = distance(KOLChuaThue.begin(), firstIT); //Tim vi tri cua no trong KOLChuaTHue
         thueKOL(firstKOL,index);
     }
-    float getScore(KOL kol){
+    float getScore(KOL kol){ //Ham danh gia score moi khi da them first KOL
         unordered_set<int> nguoiTiepCanTest = nguoiTiepCan;
         for(auto n: kol.followerSet){
             nguoiTiepCanTest.insert(n);
@@ -140,7 +129,7 @@ struct Solution{
         thueFirstKOL();
         KOL nextKOL;
         while(!KOLChuaThue.empty()){
-            float maxScore=-1;
+            float maxScore=0;
             float maxIndex=-1;
             for(int i=0;i<KOLChuaThue.size();i++){
                 if(tienConLai<KOLChuaThue[i].money)
@@ -162,12 +151,12 @@ struct Solution{
 
     Solution(){}
 
-    Solution(Input &data){
+    Solution(Input &data){ //constructor
         tongSoNguoiTiepCan=0;
         this->data = &data;
         tienConLai = data.providedMoney;
         KOLChuaThue = data.listKOL;
-        greedySolution();
+    
     }
 
     void printSolution(){
@@ -183,6 +172,7 @@ struct Solution{
 int main (){
     Input io("database/output1.txt");
     Solution solution(io);
+    solution.greedySolution();
     solution.printSolution();
 //    solution.tongSoTienDeThueHet();
 //    solution.tongSoFollower();
