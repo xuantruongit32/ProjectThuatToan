@@ -119,7 +119,16 @@ struct Solution{
         }
         return firstKOL;
     }
+    float getScore(KOL kol){
+        unordered_set<int> nguoiTiepCanTest = nguoiTiepCan;
+        for(auto n: kol.followerSet){
+            nguoiTiepCanTest.insert(n);
+        }
+        int tongSoNguoiTiepCanTest = nguoiTiepCanTest.size();
+        float score = tongSoNguoiTiepCanTest/kol.money;
+        return score;
 
+    }
 //    void beginSolution(){
 //        for(auto c: KOLChuaThue){
 //            if(tienConLai<=0)
@@ -173,9 +182,9 @@ struct Solution{
 int main (){
     Input io("database/output2.txt");
     Solution solution(io);
-    solution.thueKOL(solution.getFirstKOL(), 100);
+    cout<<solution.getScore(solution.getFirstKOL())<<endl;
 //    solution.getBestNeighbor().printSolution();
-    solution.printSolution();
+//    solution.printSolution();
 //    solution.tongSoTienDeThueHet();
 //    solution.tongSoFollower();
     }

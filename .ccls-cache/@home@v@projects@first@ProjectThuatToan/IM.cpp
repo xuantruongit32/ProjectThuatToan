@@ -115,11 +115,20 @@ struct Solution{
         for(int i=0; i<KOLChuaThue.size(); i++){
             int kolScore = KOLChuaThue[i].numberFollowers/KOLChuaThue[i].money;
             if (kolScore>maxScore)
-                firstKOL = data->listKOL[i];
+                firstKOL = KOLChuaThue[i];
         }
         return firstKOL;
     }
+    float getScore(KOL kol){
+        unordered_set<int> nguoiTiepCanTest = nguoiTiepCan;
+        for(auto n: kol.followerSet){
+            nguoiTiepCanTest.insert(n);
+        }
+        int tongSoNguoiTiepCanTest = nguoiTiepCanTest.size();
+        float score = tongSoNguoiTiepCanTest/kol.money;
+        return score;
 
+    }
 //    void beginSolution(){
 //        for(auto c: KOLChuaThue){
 //            if(tienConLai<=0)
@@ -173,9 +182,8 @@ struct Solution{
 int main (){
     Input io("database/output2.txt");
     Solution solution(io);
-    solution.thueKOL(solution.getFirstKOL(), 100);
 //    solution.getBestNeighbor().printSolution();
-    solution.printSolution();
+//    solution.printSolution();
 //    solution.tongSoTienDeThueHet();
 //    solution.tongSoFollower();
     }
