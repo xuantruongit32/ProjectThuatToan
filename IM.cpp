@@ -59,7 +59,7 @@ struct Input{
 struct Solution{
     Input *data;
     double tienConLai;
-    unordered_map<int,int> nguoiTiepCan; //int dau tien la ten nguoi theo doi, int sau la dem so KOL ma nguoi do theo doi
+    unordered_set<int> nguoiTiepCan; //int dau tien la ten nguoi theo doi, int sau la dem so KOL ma nguoi do theo doi
     int tongSoNguoiTiepCan;
     vector<KOL> KOLChuaThue;
     vector<KOL> KOLDaThue;
@@ -98,6 +98,16 @@ struct Solution{
         }
         cout<<"Tong so Follower: "<<i<<endl;
         
+    }
+    void thueKOL(KOL kol, int i){
+        tienConLai -= kol.money;
+        for(auto n: kol.followerSet){
+            nguoiTiepCan.insert(n);
+        }
+        tongSoNguoiTiepCan = nguoiTiepCan.size();
+        KOLChuaThue.erase(KOLChuaThue.begin()+1);
+        KOLDaThue.push_back(kol);
+
     }
     KOL getFirstKOL(){
         KOL firstKOL;
@@ -163,10 +173,10 @@ struct Solution{
 int main (){
     Input io("database/output2.txt");
     Solution solution(io);
+    solution.thueKOL(solution.getFirstKOL(), 100);
 //    solution.getBestNeighbor().printSolution();
-//    solution.printSolution();
-    cout<<solution.getFirstKOL().name<<endl;
-    solution.tongSoTienDeThueHet();
-    solution.tongSoFollower();
+    solution.printSolution();
+//    solution.tongSoTienDeThueHet();
+//    solution.tongSoFollower();
     }
 
