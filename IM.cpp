@@ -112,10 +112,10 @@ struct Solution{
     KOL getFirstKOL(){
         KOL firstKOL;
         float maxScore = -1;
-        for(int i=0; i<data->listKOL.size(); i++){
-            int kolScore = data->listKOL[i].numberFollowers/data->listKOL[i].money;
+        for(int i=0; i<KOLChuaThue.size(); i++){
+            int kolScore = KOLChuaThue[i].numberFollowers/KOLChuaThue[i].money;
             if (kolScore>maxScore)
-                firstKOL = data->listKOL[i];
+                firstKOL = KOLChuaThue[i];
         }
         return firstKOL;
     }
