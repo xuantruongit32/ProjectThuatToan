@@ -29,8 +29,15 @@ struct KOL {
     bool operator<(const KOL& other){
         return numberFollowers/money < other.numberFollowers/other.money;
     }
+    bool operator>(const KOL& other){
+        return money > other.money;
+    }
 
 };
+
+bool compareMoney(const KOL &kol1, const KOL &kol2){
+    return kol1.money < kol2.money;
+}
 
 struct Input{ //doc File
     double providedMoney;
@@ -122,6 +129,11 @@ struct Solution{
         int index = distance(KOLChuaThue.begin(), firstIT); //Tim vi tri cua no trong KOLChuaTHue
         thueKOL(firstKOL,index);
     }
+    float minMoneyKOLChuaThue(){
+        auto firstIT = min_element(KOLChuaThue.begin(), KOLChuaThue.end(), compareMoney); 
+        return firstIT->money;
+
+    }
     float getScore(KOL kol){ //Ham danh gia score moi khi da them first KOL
         unordered_set<int> nguoiTiepCanTest = nguoiTiepCan;
         for(auto n: kol.followerSet){
@@ -154,6 +166,28 @@ struct Solution{
             if(maxIndex == -1){
                 break;
             }
+            if(tienConLai-nextKOL.money<minMoneyKOLChuaThue()){
+                int max=-1;
+                int maxIndex=-1;
+                KOL maxKOL;
+                unordered_set<int> nguoiTiepCanTest = nguoiTiepCan;
+                for(int i=0;i<KOLChuaThue.size();i++){
+                    if(tienConLai>=KOLChuaThue[i].money){
+                        for(auto n: KOLChuaThue[i].followerSet){
+                            nguoiTiepCanTest.insert(n);
+                        }
+                        int tongSoNguoiTiepCanTest = nguoiTiepCanTest.size();
+                        if(tongSoNguoiTiepCanTest>max){
+                            max = tongSoNguoiTiepCanTest;
+                            maxIndex = i;
+                            maxKOL = KOLChuaThue[i];
+                        }
+                    }
+                }
+                thueKOL(maxKOL,maxIndex);
+                break;
+
+            }
             thueKOL(nextKOL,maxIndex);
         }
 
@@ -182,10 +216,10 @@ struct Solution{
 int main (){
     Input io("database/output1.txt");
     Solution solution(io);
-//    solution.greedySolution();
-//    solution.printSolution();
-    solution.tongSoTienDeThueHet();
-    solution.tongSoFollowerUnique();
+    solution.greedySolution();
+    solution.printSolution();
+//    solution.tongSoTienDeThueHet();
+//    solution.tongSoFollowerUnique();
 //    solution.tongSoFollower();
     }
 
