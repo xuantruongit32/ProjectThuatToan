@@ -5,6 +5,7 @@
 #include <iostream>
 #include <iterator>
 #include <unordered_map>
+#include <unordered_set>
 using namespace std;
 struct KOL {
     string name;
@@ -95,7 +96,14 @@ struct Solution{
             i+=c.followerSet.size();
         }
         cout<<"Tong so Follower cua data: "<<i<<endl;
-        
+    }
+    void tongSoFollowerUnique(){
+        unordered_set<int> test;
+        for(auto c: data->listKOL){
+            for(auto n: c.followerSet)
+                test.insert(n);
+        }
+        cout<<"Tong so Follower Unique cua data: "<<test.size()<<endl;
     }
     void thueKOL(KOL kol, int i){ //i la vi tri cua kol trong KOLChuaTHue
         tienConLai -= kol.money;
@@ -135,12 +143,14 @@ struct Solution{
                 if(tienConLai<KOLChuaThue[i].money)
                     // Neu tien khong du thue KOL nay, bo qua va tiep tuc voi KOL khac
                     continue;
+                //Tim KOL nao co max score
                 if(getScore(KOLChuaThue[i])>maxScore){
                     nextKOL = KOLChuaThue[i];
                     maxScore=getScore(KOLChuaThue[i]);
                     maxIndex=i;
                 }
             }
+            // Neu tienConLai khong du thue KOL nao thi break, vi maxIndex khong thay doi
             if(maxIndex == -1){
                 break;
             }
@@ -172,9 +182,10 @@ struct Solution{
 int main (){
     Input io("database/output1.txt");
     Solution solution(io);
-    solution.greedySolution();
-    solution.printSolution();
-//    solution.tongSoTienDeThueHet();
+//    solution.greedySolution();
+//    solution.printSolution();
+    solution.tongSoTienDeThueHet();
+    solution.tongSoFollowerUnique();
 //    solution.tongSoFollower();
     }
 
